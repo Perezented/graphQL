@@ -8,6 +8,9 @@ const schema = buildSchema(`
         course(id: Int!): Course
         courses(topic: String): [Course]
     }
+    type Mutation {
+      updateCourseTopic(id: Int!, topic: String!): Course
+    }
     type Course{
       id: Int
       title: String
@@ -53,14 +56,7 @@ const getCourse = function (args) {
     return course.id === id;
   })[0];
 };
-const getCourses = function (args) {
-  if (args.topic) {
-    const topic = args.topic;
-    return coursesData.filter((course) => course.topic === topic);
-  } else {
-    return coursesData;
-  }
-};
+// GET SINGLE COURSE
 // get courseID 1:
 // query getCoursesForTopic($courseID: Int!){
 //   course(id: $courseID){
@@ -74,6 +70,15 @@ const getCourses = function (args) {
 
 // ------------
 // {"courseID":1}
+
+const getCourses = function (args) {
+  if (args.topic) {
+    const topic = args.topic;
+    return coursesData.filter((course) => course.topic === topic);
+  } else {
+    return coursesData;
+  }
+};
 
 // DOUBLE QUERY WITH FRAGS
 
@@ -100,9 +105,45 @@ const getCourses = function (args) {
 //   "courseID2": 2
 // }
 
+const updateCourseTopic = function ({ id, topic }) {
+  coursesData.map((course) => {
+    if (course.id === id) {
+      course.topic = topic;
+      return course;
+    }
+  });
+  return coursesData.filter((course) => course.id === id)[0];
+};
+
+// GRAPHQL REQUESTS TO HAVE MUTATION WORK
+
+// mutation updateCourseTopic($id: Int!, $topic: String!) {
+//   updateCourseTopic(id: $id, topic: $topic) {
+//     ...courseFields
+//   }
+// }
+
+// fragment courseFields on Course {
+//   title
+//   author
+//   description
+//   topic
+//   url
+// }
+// {
+//   "id": 1,
+//   "topic": "Node.js, React.js, JavaScript"
+// }
+// {
+//   "id": 1,
+//   "topic": "Node.js"
+// }
+
+// Root Resolver
 const root = {
   course: getCourse,
-  courses: getCourses
+  courses: getCourses,
+  updateCourseTopic: updateCourseTopic
 };
 
 // Create an express server and GraphQL endpoint
