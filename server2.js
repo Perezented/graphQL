@@ -4,31 +4,31 @@ const { buildSchema } = require("graphql");
 
 // GraphQL Schema
 const schema = buildSchema(`
-    """ Seach course or course """
+    """ Seach course using an id, or courses using a topic"""
     type Query {
         """ course by id, Int. Returns a course """
         course(id: Int!): Course
-        """ courses by topic, String. Returns an array """
+        " courses by topic, String. Returns an array "
         courses(topic: String): [Course]
     }
     """ Mutatation to a course """
     type Mutation {
-      """ updateCourseTopic by id, Int, topic, String. Returns a Course """
+      " updateCourseTopic by id, Int, topic, String. Returns a Course "
       updateCourseTopic(id: Int!, topic: String!): Course
     }
     """ Course with id, title, author, descr., topic, and url as parameters. """
     type Course{
-      """ Course ID using an Int """
+      " Course ID using an Int "
       id: Int
-      """ Title using a String """
+      " Title using a String "
       title: String
-      """ Author as a String """
+      " Author as a String "
       author: String
-      """ Description as a String """
+      " Description as a String "
       description: String
-      """ Topic as a String """
+      " Topic as a String "
       topic: String
-      """ Url as a String """
+      " Url as a String "
       url: String
     }
 `);
