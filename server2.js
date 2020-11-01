@@ -4,22 +4,35 @@ const { buildSchema } = require("graphql");
 
 // GraphQL Schema
 const schema = buildSchema(`
+    """ Seach course or course """
     type Query {
+        """ course by id, Int. Returns a course """
         course(id: Int!): Course
+        """ courses by topic, String. Returns an array """
         courses(topic: String): [Course]
     }
+    """ Mutatation to a course """
     type Mutation {
+      """ updateCourseTopic by id, Int, topic, String. Returns a Course """
       updateCourseTopic(id: Int!, topic: String!): Course
     }
+    """ Course with id, title, author, descr., topic, and url as parameters. """
     type Course{
+      """ Course ID using an Int """
       id: Int
+      """ Title using a String """
       title: String
+      """ Author as a String """
       author: String
+      """ Description as a String """
       description: String
+      """ Topic as a String """
       topic: String
+      """ Url as a String """
       url: String
     }
 `);
+
 var coursesData = [
   {
     id: 1,
@@ -58,6 +71,8 @@ const getCourse = function (args) {
 };
 // GET SINGLE COURSE
 // get courseID 1:
+
+// ```
 // query getCoursesForTopic($courseID: Int!){
 //   course(id: $courseID){
 //     title
@@ -67,7 +82,7 @@ const getCourse = function (args) {
 //     url
 //   }
 // }
-
+// ```
 // ------------
 // {"courseID":1}
 
@@ -82,6 +97,7 @@ const getCourses = function (args) {
 
 // DOUBLE QUERY WITH FRAGS
 
+// ```
 // query getCoursesWithFragments($courseID1: Int!, $courseID2: Int!) {
 //   course1: course(id: $courseID1) {
 //     ...courseFields
@@ -98,7 +114,7 @@ const getCourses = function (args) {
 //   topic
 //   url
 // }
-
+// ```
 // ------------
 // {
 //   "courseID1": 1,
@@ -117,12 +133,12 @@ const updateCourseTopic = function ({ id, topic }) {
 
 // GRAPHQL REQUESTS TO HAVE MUTATION WORK
 
+// ```
 // mutation updateCourseTopic($id: Int!, $topic: String!) {
 //   updateCourseTopic(id: $id, topic: $topic) {
 //     ...courseFields
 //   }
 // }
-
 // fragment courseFields on Course {
 //   title
 //   author
@@ -134,6 +150,7 @@ const updateCourseTopic = function ({ id, topic }) {
 //   "id": 1,
 //   "topic": "Node.js, React.js, JavaScript"
 // }
+// ```
 // {
 //   "id": 1,
 //   "topic": "Node.js"
